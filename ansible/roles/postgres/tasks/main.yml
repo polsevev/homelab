@@ -1,0 +1,46 @@
+---
+
+- name: Install postgresql
+  ansible.builtin.apt:
+    pkg:
+      - postgresql
+      - python3-psycopg2
+    update_cache: true
+  become: true
+  notify: Restart postgres
+
+- name: Create test db
+  community.postgresql.postgresql_db:
+    name: test
+    comment: This is a test db
+  become: true
+  become_user: postgres
+
+- name: Create postgres user
+  community.postgresql.postgresql_user:
+    db: test
+    name: polsevev
+    password: "{{ postgres_user_polsevev_pass }}"
+  become: true
+  become_user: postgres
+
+- name: Copy authorization config
+  ansible.builtin.copy:
+    src: pg_hba.conf
+    dest: /etc/postgresql/16/main/pg_hba.conf
+    owner: postgres
+    group: postgres
+    mode: "0640"
+  become: true
+  notify: Restart postgres
+
+- name: Copy connection config
+  ansible.builtin.copy:
+    src: postgresql.conf
+    dest: /etc/postgresql/16/main/postgresql.conf
+    owner: postgres
+    group: postgres
+    mode: "0640"
+    backup: true
+  become: true
+  notify: Restart postgres

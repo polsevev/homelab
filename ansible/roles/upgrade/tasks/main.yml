@@ -1,0 +1,17 @@
+---
+- name: Apt upgrade
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: true
+  become: true
+
+# Restart required?
+- name: Check if reboot is needed
+  ansible.builtin.stat:
+    path: /var/run/reboot-required
+  register: check_reboot
+
+- name: Reboot
+  ansible.builtin.reboot:
+  become: true
+  when: check_reboot.stat.exists

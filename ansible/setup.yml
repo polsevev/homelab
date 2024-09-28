@@ -1,0 +1,6 @@
+---
+- name: Setup postgres!
+  hosts:
+    - brevgress
+  roles:
+    - postgres

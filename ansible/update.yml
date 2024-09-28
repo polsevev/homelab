@@ -1,0 +1,7 @@
+- name: Update all machines (except unraid)
+  hosts:
+    - proxmox
+    - vms
+  serial: 1
+  roles:
+    - upgrade

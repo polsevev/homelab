@@ -1,0 +1,7 @@
+---
+- name: Install common dependencies
+  ansible.builtin.apt:
+    pkg:
+      - acl
+    update_cache: true
+  become: true
