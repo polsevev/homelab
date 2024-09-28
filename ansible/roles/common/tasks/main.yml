@@ -3,5 +3,7 @@
   ansible.builtin.apt:
     pkg:
       - acl
+      - prometheus-node-exporter
+      - tailscale
     update_cache: true
   become: true

@@ -1,0 +1,50 @@
+---
+- name: Add grafana keyring
+  ansible.builtin.deb822_repository:
+    name: grafana
+    types: [deb]
+    suites: [stable]
+    components: [main]
+    uris: https://apt.grafana.com
+    signed_by: https://apt.grafana.com/gpg.key
+    state: present
+    enabled: true
+  become: true
+
+- name: Install required packages
+  ansible.builtin.apt:
+    pkg:
+      - apt-transport-https
+      - software-properties-common
+      - wget
+      - grafana
+      - prometheus
+    update_cache: true
+  become: true
+
+- name: Start grafana service
+  ansible.builtin.systemd_service:
+    name: grafana-server
+    state: started
+  become: true
+
+- name: Start prometheus service
+  ansible.builtin.systemd_service:
+    name: prometheus
+    state: started
+  become: true
+
+- name: Copy prometheus config
+  ansible.builtin.copy:
+    src: prometheus.yml
+    dest: /etc/prometheus/prometheus.yml
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+
+- name: Restard prometheus service
+  ansible.builtin.systemd_service:
+    name: prometheus
+    state: restarted
+  become: true

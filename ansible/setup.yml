@@ -1,6 +1,19 @@
----
-- name: Setup postgres!
+- name: Common Server
+  hosts:
+    - vms
+    - proxmox
+  roles:
+    - common
+
+- name: Setup postgres
   hosts:
     - brevgress
   roles:
     - postgres
+
+- name: Setup grafana
+  hosts:
+    - grafana
+  roles:
+    - grafana
+
