@@ -15,4 +15,3 @@ steps:
       - echo $VAULT_PASSWORD >> ./.vault_password
       - ansible-playbook -i homelab.ini --extra-vars "ansible_sudo_pass=$ansible_password" setup.yml
     secrets: [ SSH_KEY, ansible_password, VAULT_PASSWORD ]
-
