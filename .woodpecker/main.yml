@@ -1,6 +1,6 @@
 when:
-  - event: cron
-    cron: ansible_setup
+  - event: push
+    branch: main
 
 steps:
   - name: build
