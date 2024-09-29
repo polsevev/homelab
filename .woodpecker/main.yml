@@ -1,6 +1,6 @@
 when:
   - event: push
-    branch: main
+    branch: woodpecker_test
 
 steps:
   - name: build
@@ -10,7 +10,7 @@ steps:
       - mkdir /root/.ssh && chmod 0700 /root/.ssh
       - echo $SSH_KEY | base64 --decode >> /root/.ssh/id_rsa
       - chmod 0600 /root/.ssh/id_rsa
-      - cd /ansible 
+      - cd ansible 
       - touch ./.vault_password
       - echo $VAULT_PASSWORD >> ./.vault_password
       - ansible-playbook -i homelab.ini --extra-vars "ansible_sudo_pass=$ansible_password" setup.yml
