@@ -7,6 +7,7 @@ steps:
     image: local/builder
 
     commands:
+      - ansible-playbook --help
       - mkdir /root/.ssh && chmod 0700 /root/.ssh
       - echo $SSH_KEY | base64 --decode >> /root/.ssh/id_rsa
       - chmod 0600 /root/.ssh/id_rsa
