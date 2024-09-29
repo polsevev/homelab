@@ -4,6 +4,8 @@
     pkg:
       - acl
       - prometheus-node-exporter
-      - tailscale
+      - btop
+      - ca-certificates
+      - curl
     update_cache: true
   become: true

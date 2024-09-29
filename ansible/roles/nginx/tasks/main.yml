@@ -1,0 +1,8 @@
+---
+- name: Install nginx
+  ansible.builtin.apt:
+    pkg:
+      - nginx
+      - certbot
+    update_cache: true
+  become: true

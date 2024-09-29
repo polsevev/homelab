@@ -1,0 +1,30 @@
+---
+- name: Make project source
+  ansible.builtin.file:
+    path: /home/ansible/uptime_kuma
+    state: directory
+    mode: "0755"
+
+- name: Make uptime_kuma data
+  ansible.builtin.file:
+    path: /home/ansible/uptime_kuma/uptime-kuma-data
+    state: directory
+    mode: "0755"
+
+- name: Copy compose file
+  ansible.builtin.copy:
+    src: docker-compose.yml
+    dest: /home/ansible/uptime_kuma/docker-compose.yml
+    mode: "0644"
+
+- name: Start uptime_kuma container
+  community.docker.docker_compose_v2:
+    project_src: /home/ansible/uptime_kuma
+
+- name: Copy uptime_kuma nginx
+  ansible.builtin.copy:
+    src: uptime_kuma.conf
+    dest: /etc/nginx/sites-enabled/uptime_kuma.conf
+    mode: "0644"
+  become: true
+  notify: Reload nginx

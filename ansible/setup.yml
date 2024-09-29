@@ -17,3 +17,15 @@
   roles:
     - grafana
 
+- name: Docker on vms
+  hosts:
+    - vms
+  roles:
+    - docker
+
+- name: Setup uptime_kuma
+  hosts:
+    - havneboks
+  roles:
+    - uptime_kuma
+
