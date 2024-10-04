@@ -1,6 +1,5 @@
 ---
 dependencies:
-  - common
   - role: nginx
     nginx_acme_sh_domains:
-      - uptime.l.polsevev.dev
+      - grafana.l.polsevev.dev

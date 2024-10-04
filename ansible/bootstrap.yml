@@ -1,5 +1,5 @@
 ---
-- name: Bootstrap playbook
+- name: Setup uptime_kuma
   hosts:
     - havneboks
   roles:

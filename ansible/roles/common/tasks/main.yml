@@ -7,5 +7,7 @@
       - btop
       - ca-certificates
       - curl
+      - python3
+      - python3-pip
     update_cache: true
   become: true

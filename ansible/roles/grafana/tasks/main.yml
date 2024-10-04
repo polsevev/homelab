@@ -35,11 +35,24 @@
   become: true
 
 - name: Copy prometheus config
-  ansible.builtin.copy:
-    src: prometheus.yml
+  ansible.builtin.template:
+    src: prometheus.yml.j2
     dest: /etc/prometheus/prometheus.yml
     owner: root
     group: root
     mode: "0644"
   become: true
   notify: Restart prometheus
+
+- name: Copy nginx config
+  ansible.builtin.copy:
+    src: grafana.conf
+    dest: /etc/nginx/sites-enabled/grafana.conf
+    mode: "0644"
+  become: true
+
+- name: Reload nginx config
+  ansible.builtin.service:
+    name: nginx
+    state: reloaded
+  become: true
