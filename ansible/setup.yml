@@ -28,3 +28,9 @@
     - havneboks
   roles:
     - uptime_kuma
+
+- name: Setup FTB server
+  hosts:
+    - matmonster
+  roles:
+    - enigmatica2

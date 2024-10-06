@@ -9,5 +9,6 @@
       - curl
       - python3
       - python3-pip
+      - lm-sensors
     update_cache: true
   become: true

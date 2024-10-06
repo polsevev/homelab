@@ -1,6 +1,8 @@
 ---
 - name: Setup uptime_kuma
   hosts:
-    - havneboks
+    - matmonster
   roles:
-    - uptime_kuma
+    - upgrade
+    - common
+    - enigmatica2

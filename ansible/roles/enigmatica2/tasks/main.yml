@@ -1,0 +1,52 @@
+---
+
+- name: Make dir
+  ansible.builtin.file:
+    state: directory
+    path: ~/enigmatica2
+    mode: "0755"
+
+- name: Download modpack
+  ansible.builtin.get_url:
+    url: "{{ enigmatica2_url }}"
+    dest: ~/
+    mode: "0755"
+  register: download_metadata
+
+- name: Install dependencies
+  ansible.builtin.apt:
+    pkg:
+      - unzip
+      - openjdk-8-jre
+      - screen
+  become: true
+
+- name: Unarchive modpack
+  ansible.builtin.unarchive:
+    src: "{{ download_metadata.dest }}"
+    dest: "~/enigmatica2/"
+    mode: "0755"
+    copy: false
+
+- name: Copy configurations
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "~/enigmatica2/{{ item }}"
+    mode: "0755"
+  loop:
+    - eula.txt
+    - settings.cfg
+    - server.properties
+
+- name: Check screen for running sessions
+  ansible.builtin.command: screen -ls
+  register: sessions
+  changed_when: false
+  failed_when: false
+
+- name: Run mcserver
+  ansible.builtin.command: screen -s enigmatica2 -d -m ~/enigmatica2/ServerStartLinux.sh
+  args:
+    chdir: '~/enigmatica2'
+  when: sessions.stdout.find("There is a screen on") == -1
+  changed_when: false
