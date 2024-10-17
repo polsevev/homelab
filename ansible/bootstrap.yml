@@ -1,8 +1,6 @@
 ---
 - name: Setup uptime_kuma
   hosts:
-    - matmonster
+    - grafana
   roles:
-    - upgrade
-    - common
-    - enigmatica2
+    - grafana
