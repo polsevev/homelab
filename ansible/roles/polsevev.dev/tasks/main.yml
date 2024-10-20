@@ -1,0 +1,12 @@
+---
+- name: Copy nginx config
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: /etc/nginx/sites-enabled/{{ item }}
+    owner: root
+    mode: "0644"
+  become: true
+  notify: Reload nginx
+  loop:
+    - polsevev.dev.conf
+    - jellyfin.conf

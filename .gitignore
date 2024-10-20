@@ -37,3 +37,4 @@ override.tf.json
 terraform.rc
 .vscode
 ansible/.vault_password
+ansible/roles/nginx/vars/main/vault.yml

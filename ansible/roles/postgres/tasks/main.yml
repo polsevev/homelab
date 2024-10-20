@@ -9,20 +9,29 @@
   become: true
   notify: Restart postgres
 
-- name: Create test db
+- name: Create databases
   community.postgresql.postgresql_db:
-    name: test
-    comment: This is a test db
+    name: "{{ item.database }}"
   become: true
   become_user: postgres
+  loop: "{{ postgres_users }}"
 
 - name: Create postgres user
   community.postgresql.postgresql_user:
-    db: test
-    name: polsevev
-    password: "{{ postgres_user_polsevev_pass }}"
+    db: "{{ item.database }}"
+    name: "{{ item.user }}"
+    password: "{{ item.password }}"
   become: true
   become_user: postgres
+  loop: "{{ postgres_users }}"
+
+- name: Set database owners
+  community.postgresql.postgresql_db:
+    name: "{{ item.database }}"
+    owner: "{{ item.user }}"
+  become: true
+  become_user: postgres
+  loop: "{{ postgres_users }}"
 
 - name: Copy authorization config
   ansible.builtin.copy:

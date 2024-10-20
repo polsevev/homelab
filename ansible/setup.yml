@@ -34,3 +34,28 @@
     - matmonster
   roles:
     - enigmatica2
+
+- name: Setup umami
+  hosts:
+    - umami
+  roles:
+    - umami
+
+- name: Setup polsevev.dev + jellyfin proxy
+  hosts:
+    - polsevev
+  roles:
+    - polsevev.dev
+
+- name: Setup woodpecker
+  hosts:
+    - action_runner
+  roles:
+    - github_runner
+
+- name: Setup headscale nginx
+  hosts:
+    - olympus_entry
+  roles:
+    - olympus_entry
+    - headscale

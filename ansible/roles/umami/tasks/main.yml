@@ -1,0 +1,25 @@
+---
+- name: Make project source
+  ansible.builtin.file:
+    state: directory
+    path: ~/umami
+    owner: ansible
+    mode: "0755"
+
+- name: Copy compose file
+  ansible.builtin.copy:
+    src: docker-compose.yml
+    dest: /home/ansible/umami/docker-compose.yml
+    mode: "0644"
+
+- name: Start docker compose
+  community.docker.docker_compose_v2:
+    project_src: ~/umami
+
+- name: Copy umami nginx
+  ansible.builtin.copy:
+    src: umami.conf
+    dest: /etc/nginx/sites-enabled/umami.conf
+    mode: "0644"
+  become: true
+  notify: Reload nginx

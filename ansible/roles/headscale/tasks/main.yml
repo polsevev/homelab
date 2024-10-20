@@ -1,0 +1,9 @@
+---
+- name: Copy nginx config for headscale
+  ansible.builtin.copy:
+    src: headscale.conf
+    dest: /etc/nginx/sites-enabled/headscale.conf
+    owner: root
+    mode: "0644"
+  become: true
+  notify: Reload nginx

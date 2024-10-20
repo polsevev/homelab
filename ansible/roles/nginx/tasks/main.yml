@@ -49,12 +49,23 @@
     group: root
   become: true
 
+- name: Set default CA to letsencrypt
+  ansible.builtin.command: >-
+    ./acme.sh --set-default-ca --server letsencrypt
+  args:
+    chdir: "~/.acme.sh"
+  become: true
+  changed_when: false
+
 - name: Issue acme.sh certificate(s) (this will sleep for dns_sleep seconds)
   ansible.builtin.command: >-
     ./acme.sh --issue -d {{ nginx_acme_sh_domains | join(" -d ") }}
     --dns dns_cf
   args:
     chdir: "~/.acme.sh"
+  environment:
+    CF_Token: "{{ nginx_cloudflare_api_key }}"
+    CF_Email: "{{ nginx_acme_sh_account_email }}"
   become: true
   register: issue_result
   changed_when: issue_result.rc == 0 and "Cert success" in issue_result.stdout
@@ -62,7 +73,7 @@
 
 - name: Install certs to nginx
   ansible.builtin.command: >-
-    ./acme.sh --install-cert -d {{ item }}
+    ./acme.sh --install-cert -d {{ nginx_acme_sh_domains[0] }}
     --key-file       /etc/nginx/acme.sh/{{ item }}.key.pem
     --fullchain-file /etc/nginx/acme.sh/{{ item }}.cert.pem
     --reloadcmd     "systemctl reload nginx"

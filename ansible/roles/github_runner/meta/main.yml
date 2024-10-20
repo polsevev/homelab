@@ -1,0 +1,5 @@
+---
+dependencies:
+  - role: nginx
+    nginx_acme_sh_domains:
+      - woodpecker.polsevev.dev

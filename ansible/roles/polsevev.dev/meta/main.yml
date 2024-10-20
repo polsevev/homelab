@@ -1,0 +1,6 @@
+---
+dependencies:
+  - role: nginx
+    nginx_acme_sh_domains:
+      - polsevev.dev
+      - jellyfin.polsevev.dev

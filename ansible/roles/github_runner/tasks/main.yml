@@ -1,0 +1,87 @@
+---
+- name: Install required packages
+  ansible.builtin.apt:
+    pkg:
+      - nodejs
+      - npm
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    update_cache: true
+  become: true
+
+- name: Give user access to docker
+  ansible.builtin.user:
+    name: ansible
+    append: true
+    groups: docker
+  become: true
+
+- name: Create directory
+  ansible.builtin.file:
+    state: directory
+    path: /home/ansible/woodpecker
+    mode: "0772"
+
+- name: Copy docker-compose
+  ansible.builtin.copy:
+    src: files/docker-compose.yml
+    dest: /home/ansible/woodpecker
+    mode: "0772"
+
+
+- name: Deploy woodpecker
+  community.docker.docker_compose_v2:
+    state: present
+    project_src: /home/ansible/woodpecker
+
+
+- name: Deploy woodpecker
+  community.docker.docker_compose_v2:
+    state: restarted
+    project_src: /home/ansible/woodpecker
+
+- name: Generate an OpenSSH keypair with the default values (4096 bits, rsa)
+  community.crypto.openssh_keypair:
+    path: /home/ansible/.ssh/id_ssh_rsa
+
+- name: Read public key into var
+  ansible.builtin.slurp:
+    src: /home/ansible/.ssh/id_ssh_rsa.pub
+  register: slurped_data
+
+- name: Set fact
+  ansible.builtin.set_fact:
+    priv_key: "{{ slurped_data.content | ansible.builtin.b64decode }}"
+
+- name: Add public key to other server
+  ansible.builtin.lineinfile:
+    state: present
+    line: "{{ priv_key }}"
+    path: /home/ansible/.ssh/authorized_keys
+  delegate_to: 192.168.1.92
+
+- name: Copy Dockerfile
+  ansible.builtin.copy:
+    src: files/Dockerfile
+    dest: /home/ansible/woodpecker/Dockerfile
+    mode: "0772"
+
+- name: Build docker container locally
+  community.docker.docker_image:
+    build:
+      path: /home/ansible/woodpecker/
+    name: local/builder
+    source: build
+  become: true
+
+- name: Copy nginx config
+  ansible.builtin.copy:
+    src: woodpecker.conf
+    dest: /etc/nginx/sites-enabled/woodpecker.conf
+    owner: root
+    mode: "0644"
+  become: true
+  notify: Reload nginx

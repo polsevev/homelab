@@ -2,8 +2,8 @@
 - name: Bootstrap tailscale on host
   vars:
     headscale_domain: "https://headscale.polsevev.dev"
-    username: havneboks
+    username: umami
   hosts:
-    - action_runner
+    - umami
   roles:
     - tailscale

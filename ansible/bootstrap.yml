@@ -1,6 +1,7 @@
 ---
-- name: Setup uptime_kuma
+- name: Setup headscale nginx
   hosts:
-    - grafana
+    - olympus_entry
   roles:
-    - grafana
+    - olympus_entry
+
