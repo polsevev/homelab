@@ -23,11 +23,12 @@
   roles:
     - docker
 
-- name: Setup uptime_kuma
+- name: Setup Internal Docker Services
   hosts:
     - havneboks
   roles:
     - uptime_kuma
+    - kitchenowl
 
 - name: Setup FTB server
   hosts:
