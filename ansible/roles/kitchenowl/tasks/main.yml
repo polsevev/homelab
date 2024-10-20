@@ -1,0 +1,26 @@
+---
+- name: Make project source
+  ansible.builtin.file:
+    state: directory
+    path: ~/kitchenowl
+    owner: ansible
+    mode: "0755"
+
+- name: Copy compose file
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: /home/ansible/kitchenowl/docker-compose.yml
+    mode: "0644"
+
+- name: Start docker compose
+  community.docker.docker_compose_v2:
+    project_src: ~/kitchenowl
+
+- name: Copy umami nginx
+  ansible.builtin.copy:
+    src: kitchenowl.conf
+    dest: /etc/nginx/sites-enabled/kitchenowl.conf
+    mode: "0644"
+  become: true
+  notify: Reload nginx
+

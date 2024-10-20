@@ -1,7 +1,6 @@
 ---
 - name: Setup headscale nginx
   hosts:
-    - olympus_entry
+    - havneboks
   roles:
-    - olympus_entry
-
+    - kitchenowl
