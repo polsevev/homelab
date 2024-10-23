@@ -1,6 +1,7 @@
 ---
-- name: Setup headscale nginx
+- name: Setup umami
   hosts:
-    - havneboks
+    - vms
+    - proxmox
   roles:
-    - kitchenowl
+    - common

@@ -1,0 +1,6 @@
+---
+- name: Set cpu governor to powersave
+  ansible.builtin.cron:
+    name: "check dirs"
+    special_time: reboot
+    job: "echo 'powersave' | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor >/dev/null 2>&1"

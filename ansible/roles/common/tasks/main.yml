@@ -13,10 +13,7 @@
     update_cache: true
   become: true
 
-- name: Install VM dependencies
-  ansible.builtin.apt:
-    pkg:
-      - qemu-guest-agent
-    state: absent
-  become: true
-
+- name: Import proxmox common when applicable
+  ansible.builtin.include_tasks:
+    file: proxmox.yml
+  when: "'proxmox' in group_names"
